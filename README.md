@@ -2,7 +2,8 @@
 
 This is the Loco Positioning node bootloader project.
 
-This is work in progress.... 
+This is work in progress....
+ 
 
 ## Building
 
