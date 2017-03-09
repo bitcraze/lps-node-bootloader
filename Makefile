@@ -14,11 +14,11 @@ INCLUDES=-Isrc/inc -Isrc/inc/$(CPU) -I$(HAL_ROOT)/Inc
 
 # Platform specific files
 OBJS+=src/src/startup_stm32f072xb.o src/src/system_stm32f0xx.o
-OBJS+=src/src/gpio.o src/src/led.o src/src/system.o src/src/stm32f0xx_it.o
+OBJS+=src/src/gpio.o src/src/led.o src/src/bootmode.o src/src/system.o src/src/stm32f0xx_it.o
 
 OBJS+=src/src/main.o
 
-HALS+=gpio rcc cortex rcc_ex
+HALS+=gpio rcc cortex rcc_ex pwr
 OBJS+=$(foreach mod, $(HALS), $(HAL_ROOT)/Src/stm32$(CPU)xx_hal_$(mod).o)
 OBJS+=$(HAL_ROOT)/Src/stm32$(CPU)xx_hal.o
 

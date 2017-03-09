@@ -23,12 +23,15 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stm32f0xx_hal.h>
-#include <stm32f0xx_hal_gpio.h>
+#include <stm32f0xx.h>
 
 #include "system.h"
 #include "gpio.h"
 #include "led.h"
+#include "bootmode.h"
+
+static void bootLoad();
+static void boot();
 
 int main() {
   // Reset of all peripherals, Initializes the Flash interface and the Systick.
@@ -40,6 +43,17 @@ int main() {
   // Initialize GPIO
   MX_GPIO_Init();
 
+  if (!isBootLoaderModeActivated()) {
+    HAL_Delay(500);
+    clearBootLoaderModeFlag();
+    boot();
+  } else {
+    clearBootLoaderModeFlag();
+    bootLoad();
+  }
+}
+
+static void bootLoad() {
   while (1) {
     ledOff(ledSync);
     ledOff(ledMode);
@@ -54,3 +68,16 @@ int main() {
     HAL_Delay(500);
   }
 }
+
+static void boot() {
+  while (1) {
+    ledOff(ledSync);
+
+    HAL_Delay(200);
+
+    ledOn(ledSync);
+
+    HAL_Delay(200);
+  }
+}
+
