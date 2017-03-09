@@ -1,6 +1,6 @@
 OPENOCD           ?= openocd
 OPENOCD_INTERFACE ?= interface/stlink-v2.cfg
-REV								?= B
+REV								?= D
 PYTHON2           ?= python2
 
 PROG=lps-node-bootloader
@@ -14,11 +14,11 @@ INCLUDES=-Iinc -Iinc/$(CPU) -I$(HAL_ROOT)/Inc
 
 # Platform specific files
 OBJS+=src/startup_stm32f072xb.o src/system_stm32f0xx.o
-OBJS+=src/gpio.o
+OBJS+=src/gpio.o src/led.o src/system.o src/stm32f0xx_it.o
 
 OBJS+=src/main.o
 
-HALS+=gpio rcc cortex
+HALS+=gpio rcc cortex rcc_ex
 OBJS+=$(foreach mod, $(HALS), $(HAL_ROOT)/Src/stm32$(CPU)xx_hal_$(mod).o)
 OBJS+=$(HAL_ROOT)/Src/stm32$(CPU)xx_hal.o
 
@@ -53,7 +53,7 @@ openocd:
 	$(OPENOCD) -d2 -f $(OPENOCD_INTERFACE) -f $(OPENOCD_TARGET) -c init -c targets
 
 dfu:
-	dfu-util -d 0483:df11 -a 0 -D bin/lps-node-bootloader.dfu -R
+	dfu-util -d 0483:df11 -a 0 -D bin/$(PROG).dfu -R
 
 # Generic rules
 %.bin: %.elf

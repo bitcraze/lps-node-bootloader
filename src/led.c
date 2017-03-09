@@ -5,7 +5,7 @@
  * +------+    / /_/ / / /_/ /__/ /  / /_/ / / /_/  __/
  *  ||  ||    /_____/_/\__/\___/_/   \__,_/ /___/\___/
  *
- * LPS node bootloader.
+ * LPS node firmware.
  *
  * Copyright 2016, Bitcraze AB
  *
@@ -22,35 +22,43 @@
  * You should have received a copy of the GNU General Public License
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <stm32f0xx_hal.h>
 #include <stm32f0xx_hal_gpio.h>
 
-#include "system.h"
-#include "gpio.h"
 #include "led.h"
 
-int main() {
-  // Reset of all peripherals, Initializes the Flash interface and the Systick.
-  HAL_Init();
+typedef struct {
+  uint32_t pin;
+  GPIO_TypeDef * port;
+} led_t;
 
-  // Configure the system clock
-  SystemClock_Config();
+static const led_t leds_revd[] = {
+    [ledRanging] = {.pin = GPIO_PIN_1, .port = GPIOF},
+    [ledSync] = {.pin = GPIO_PIN_1, .port = GPIOA},
+    [ledMode] = {.pin = GPIO_PIN_2, .port = GPIOA}
+};
 
-  // Initialize GPIO
-  MX_GPIO_Init();
+static const led_t leds_revc[] = {
+    [ledRanging] = {.pin = GPIO_PIN_13, .port = GPIOC},
+    [ledSync] = {.pin = GPIO_PIN_14, .port = GPIOC},
+    [ledMode] = {.pin = GPIO_PIN_15, .port = GPIOC}
+};
 
-  while (1) {
-    ledOff(ledSync);
-    ledOff(ledMode);
-    ledOff(ledRanging);
 
-    HAL_Delay(500);
+void ledInit(void) {
+  /* Do nothing */
+}
 
-    ledOn(ledSync);
-    ledOn(ledMode);
-    ledOn(ledRanging);
+static inline void setLed(led_e led, bool value)
+{
+  HAL_GPIO_WritePin(leds_revd[led].port, leds_revd[led].pin, value?GPIO_PIN_SET:GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(leds_revc[led].port, leds_revc[led].pin, value?GPIO_PIN_SET:GPIO_PIN_RESET);
+}
 
-    HAL_Delay(500);
-  }
+void ledOn(led_e led) {
+  setLed(led, true);
+}
+
+void ledOff(led_e led) {
+  setLed(led, false);
 }
