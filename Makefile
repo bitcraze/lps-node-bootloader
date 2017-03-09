@@ -43,17 +43,17 @@ bin/$(PROG).elf: $(OBJS)
 	arm-none-eabi-size $@
 
 clean:
-	rm -f bin/lps-node-firmware.elf bin/lps-node-firmware.dfu bin/.map $(OBJS)
+	rm -f bin/$(PROG).elf bin/$(PROG).dfu bin/$(PROG).map $(OBJS)
 
 flash:
 	$(OPENOCD) -d2 -f $(OPENOCD_INTERFACE) -f $(OPENOCD_TARGET) -c init -c targets -c "reset halt" \
-	           -c "flash write_image erase bin/lps-node-firmware.elf" -c "verify_image bin/lps-node-firmware.elf" -c "reset run" -c shutdown
+	           -c "flash write_image erase bin/lps-node-bootloader.elf" -c "verify_image bin/lps-node-bootloader.elf" -c "reset run" -c shutdown
 
 openocd:
 	$(OPENOCD) -d2 -f $(OPENOCD_INTERFACE) -f $(OPENOCD_TARGET) -c init -c targets
 
 dfu:
-	dfu-util -d 0483:df11 -a 0 -D bin/lps-node-firmware.dfu -R
+	dfu-util -d 0483:df11 -a 0 -D bin/lps-node-bootloader.dfu -R
 
 # Generic rules
 %.bin: %.elf
