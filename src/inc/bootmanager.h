@@ -22,55 +22,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef __BOOT_MANAGER_H__
+#define __BOOT_MANAGER_H__
 
-#include <stm32f0xx.h>
+#include <stdint.h>
 
-#include "system.h"
-#include "gpio.h"
-#include "led.h"
-#include "bootmode.h"
-#include "bootmanager.h"
+// Useful constants
+#define FIRMWARE_ADDRESS ((uint32_t)0x08005000)
+#define RAM_BASE ((uint32_t)0x20000000)
 
-static void bootLoad();
+/**
+ * Stop all interrupt, copy the firmware interrupt vector table to ram,
+ * remap ram to begining of address space, set firmware stack pointer and
+ * finally jump to the firmware
+ */
+void bootmanagerStartFirmware(void) __attribute__((noreturn));
 
-int main() {
-  // Reset of all peripherals, Initializes the Flash interface and the Systick.
-  HAL_Init();
-
-  // Configure the system clock
-  SystemClock_Config();
-
-  // Initialize GPIO
-  MX_GPIO_Init();
-
-  if (!isBootLoaderModeActivated()) {
-    ledOn(ledRanging);
-    ledOn(ledMode);
-    HAL_Delay(250);
-    ledOff(ledRanging);
-    ledOff(ledMode);
-    ledOn(ledSync);
-    HAL_Delay(250);
-    clearBootLoaderModeFlag();
-    bootmanagerStartFirmware();
-  } else {
-    clearBootLoaderModeFlag();
-    bootLoad();
-  }
-}
-
-static void bootLoad() {
-  while (1) {
-    ledOff(ledSync);
-    ledOff(ledMode);
-    ledOff(ledRanging);
-
-    HAL_Delay(500);
-
-    ledOn(ledSync);
-    ledOn(ledMode);
-    ledOn(ledRanging);
-
-    HAL_Delay(500);
-  }
-}
+#endif // __BOOT_MANAGER_H__

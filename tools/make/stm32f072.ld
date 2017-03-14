@@ -13,7 +13,10 @@
 MEMORY
 {
     flash (rx) : ORIGIN = 0x08000000, LENGTH = 128K
-    ram  (rwx) : ORIGIN = 0x20000000, LENGTH = 16K
+    /* The beginning of the ram is going to be used for the firmware interrupt
+     * vector table, starting our ram 256 bytes later.
+     */
+    ram  (rwx) : ORIGIN = 0x20000100, LENGTH = 16128
 }
 
 ENTRY(Reset_Handler)
