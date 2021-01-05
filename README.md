@@ -1,5 +1,4 @@
-# lps-node-bootloader [![Build Status](https://api.travis-ci.org/bitcraze/lps-node-bootloader.svg)](https://travis-ci.org/bitcraze/lps-node-bootloader)
-
+# lps-node-bootloader [![CI](https://github.com/bitcraze/lps-node-bootloader/workflows/CI/badge.svg)](https://github.com/bitcraze/lps-node-bootloader/actions?query=workflow%3ACI)
 This is the Loco Positioning node bootloader project.
 
 This is work in progress....
