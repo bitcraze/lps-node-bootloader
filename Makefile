@@ -1,7 +1,7 @@
 OPENOCD           ?= openocd
 OPENOCD_INTERFACE ?= interface/stlink-v2.cfg
 REV								?= D
-PYTHON2           ?= python2
+PYTHON           ?= python3
 
 PROG=lps-node-bootloader
 
