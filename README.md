@@ -15,3 +15,11 @@ In this case jsut add a ```tb``` in front of the commands, for instance
 ### Clean 
 
 ```make clean```
+
+## Contribute
+Go to the [contribute page](https://www.bitcraze.io/contribute/) on our website to learn more.
+
+### Run test
+Run the automated build locally to test your code
+
+	./tools/build/build
